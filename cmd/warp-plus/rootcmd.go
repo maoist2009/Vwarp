@@ -42,24 +42,24 @@ type rootConfig struct {
 	wgConf   string
 	testUrl  string
 	config   string
-	
+
 	// AtomicNoize WireGuard configuration
-	AtomicNoizeEnable      bool
-	AtomicNoizeI1          string
-	AtomicNoizeI2          string
-	AtomicNoizeI3          string
-	AtomicNoizeI4          string
-	AtomicNoizeI5          string
-	AtomicNoizeS1          int
-	AtomicNoizeS2          int
-	AtomicNoizeJc          int
-	AtomicNoizeJmin        int
-	AtomicNoizeJmax        int
-	AtomicNoizeJcAfterI1   int
-	AtomicNoizeJcBeforeHS  int
-	AtomicNoizeJcAfterHS   int
-	AtomicNoizeJunkInterval time.Duration
-	AtomicNoizeAllowZeroSize bool
+	AtomicNoizeEnable         bool
+	AtomicNoizeI1             string
+	AtomicNoizeI2             string
+	AtomicNoizeI3             string
+	AtomicNoizeI4             string
+	AtomicNoizeI5             string
+	AtomicNoizeS1             int
+	AtomicNoizeS2             int
+	AtomicNoizeJc             int
+	AtomicNoizeJmin           int
+	AtomicNoizeJmax           int
+	AtomicNoizeJcAfterI1      int
+	AtomicNoizeJcBeforeHS     int
+	AtomicNoizeJcAfterHS      int
+	AtomicNoizeJunkInterval   time.Duration
+	AtomicNoizeAllowZeroSize  bool
 	AtomicNoizeHandshakeDelay time.Duration
 }
 
@@ -155,7 +155,7 @@ func newRootCmd() *rootConfig {
 		LongName:  "config",
 		Value:     ffval.NewValueDefault(&cfg.config, ""),
 	})
-	
+
 	// AtomicNoize WireGuard flags
 	cfg.flags.AddFlag(ff.FlagConfig{
 		LongName: "atomicnoize-enable",
@@ -279,16 +279,16 @@ func (c *rootConfig) exec(ctx context.Context, args []string) error {
 	}
 
 	opts := app.WarpOptions{
-		Bind:            bindAddrPort,
-		Endpoint:        c.endpoint,
-		License:         c.key,
-		DnsAddr:         dnsAddr,
-		Gool:            c.gool,
-		FwMark:          c.fwmark,
-		WireguardConfig: c.wgConf,
-		Reserved:        c.reserved,
-		TestURL:         c.testUrl,
-		AtomicNoizeConfig:   c.buildAtomicNoizeConfig(),
+		Bind:              bindAddrPort,
+		Endpoint:          c.endpoint,
+		License:           c.key,
+		DnsAddr:           dnsAddr,
+		Gool:              c.gool,
+		FwMark:            c.fwmark,
+		WireguardConfig:   c.wgConf,
+		Reserved:          c.reserved,
+		TestURL:           c.testUrl,
+		AtomicNoizeConfig: c.buildAtomicNoizeConfig(),
 	}
 
 	switch {
@@ -338,25 +338,23 @@ func (c *rootConfig) buildAtomicNoizeConfig() *preflightbind.AtomicNoizeConfig {
 	if !c.AtomicNoizeEnable {
 		return nil
 	}
-	
+
 	return &preflightbind.AtomicNoizeConfig{
-		I1:              c.AtomicNoizeI1,
-		I2:              c.AtomicNoizeI2,
-		I3:              c.AtomicNoizeI3,
-		I4:              c.AtomicNoizeI4,
-		I5:              c.AtomicNoizeI5,
-		S1:              c.AtomicNoizeS1,
-		S2:              c.AtomicNoizeS2,
-		Jc:              c.AtomicNoizeJc,
-		Jmin:            c.AtomicNoizeJmin,
-		Jmax:            c.AtomicNoizeJmax,
-		JcAfterI1:       c.AtomicNoizeJcAfterI1,
-		JcBeforeHS:      c.AtomicNoizeJcBeforeHS,
-		JcAfterHS:       c.AtomicNoizeJcAfterHS,
-		JunkInterval:    c.AtomicNoizeJunkInterval,
-		AllowZeroSize:   c.AtomicNoizeAllowZeroSize,
-		HandshakeDelay:  c.AtomicNoizeHandshakeDelay,
+		I1:             c.AtomicNoizeI1,
+		I2:             c.AtomicNoizeI2,
+		I3:             c.AtomicNoizeI3,
+		I4:             c.AtomicNoizeI4,
+		I5:             c.AtomicNoizeI5,
+		S1:             c.AtomicNoizeS1,
+		S2:             c.AtomicNoizeS2,
+		Jc:             c.AtomicNoizeJc,
+		Jmin:           c.AtomicNoizeJmin,
+		Jmax:           c.AtomicNoizeJmax,
+		JcAfterI1:      c.AtomicNoizeJcAfterI1,
+		JcBeforeHS:     c.AtomicNoizeJcBeforeHS,
+		JcAfterHS:      c.AtomicNoizeJcAfterHS,
+		JunkInterval:   c.AtomicNoizeJunkInterval,
+		AllowZeroSize:  c.AtomicNoizeAllowZeroSize,
+		HandshakeDelay: c.AtomicNoizeHandshakeDelay,
 	}
 }
-
-

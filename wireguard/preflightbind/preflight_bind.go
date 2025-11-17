@@ -50,9 +50,9 @@ type AtomicNoizeConfig struct {
 // Bind wraps a conn.Bind and fires QUIC-like preflight when WG sends a handshake initiation.
 type Bind struct {
 	inner             conn.Bind
-	port443           int            // usually 443
-	payload           []byte         // I1 bytes
-	AtomicNoizeConfig     *AtomicNoizeConfig // AtomicNoize configuration
+	port443           int                // usually 443
+	payload           []byte             // I1 bytes
+	AtomicNoizeConfig *AtomicNoizeConfig // AtomicNoize configuration
 	mu                sync.Mutex
 	lastSent          map[netip.Addr]time.Time // rate-limit per dst IP
 	interval          time.Duration            // e.g., 1s to avoid duplicate bursts
@@ -96,7 +96,7 @@ func NewWithAtomicNoize(inner conn.Bind, AtomicNoizeConfig *AtomicNoizeConfig, p
 		inner:             inner,
 		port443:           port,
 		payload:           payload,
-		AtomicNoizeConfig:     AtomicNoizeConfig,
+		AtomicNoizeConfig: AtomicNoizeConfig,
 		lastSent:          make(map[netip.Addr]time.Time),
 		interval:          minInterval,
 		postHandshakeSent: make(map[netip.Addr]bool),
@@ -492,4 +492,3 @@ func (b *Bind) maybeSendPostHandshakeJunk(ep conn.Endpoint, bufs [][]byte) {
 }
 
 // applyAtomicNoizePrefix adds S1/S2 random prefixes to WireGuard packets
-
