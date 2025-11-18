@@ -91,7 +91,7 @@ jobs:
       - name: Copy README.md & LICENSE
         run: |
           cp ${GITHUB_WORKSPACE}/README.md ./warp-plus_${{ env.ASSET_NAME }}/README.md
-          cp ${GITHUB_WORKSPACE}/LICENSE ./warp-plus_${{ env.ASSET_NAME }}/LICENSE
+          cp ${GITHUB_WORKSPACE}/LICENSE ./warp-plus_${{ env.ASSET_NAME }}/LICENSE-GPL-3.0
 
       - name: Create ZIP archive
         shell: bash
