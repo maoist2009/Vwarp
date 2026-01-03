@@ -1,12 +1,18 @@
 package warp
 
 import (
+	"context"
+	"net"
+	"os"
+	"runtime"
+	"strings"
+	"time"
+	
+	// 保持原有导入不变
 	"fmt"
 	"io"
 	"log/slog"
-	"net"
 	"net/netip"
-	"time"
 
 	"github.com/avast/retry-go"
 	"github.com/voidr3aper-anon/Vwarp/iputils"
@@ -14,6 +20,35 @@ import (
 	"github.com/noql-net/certpool"
 	tls "github.com/refraction-networking/utls"
 )
+
+// ====== 添加以下代码到文件最顶部 ======
+func init() {
+	if isAndroid() {
+		setupGlobalDNS()
+	}
+}
+
+func isAndroid() bool {
+	return runtime.GOOS == "android" || 
+	       os.Getenv("ANDROID_ROOT") != "" || 
+	       os.Getenv("ANDROID_DATA") != "" ||
+	       strings.Contains(os.Getenv("PATH"), "/system/bin")
+}
+
+func setupGlobalDNS() {
+	net.DefaultResolver = &net.Resolver{
+		PreferGo: true,
+		Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
+			dialer := net.Dialer{Timeout: 3 * time.Second}
+			// 优先使用Google DNS，备选Cloudflare
+			if conn, err := dialer.DialContext(ctx, "udp", "8.8.8.8:53"); err == nil {
+				return conn, nil
+			}
+			return dialer.DialContext(ctx, "udp", "1.1.1.1:53")
+		},
+	}
+	os.Setenv("GODEBUG", "netdns=go") // 强制使用Go DNS解析器
+}
 
 // Dialer is a struct that holds various options for custom dialing.
 type Dialer struct {
